@@ -11,16 +11,12 @@ if __name__ == "__main__":
     s = 5
     m = 30
     n = 200
-    x_orig = np.random.uniform(low=0.5, high=100.3, size=(n, 1))
-    indices = random.sample(range(0, len(x_orig)), s)
-
-    for i, p in enumerate(x_orig):
-        if i in indices:
-            continue
-        x_orig[i] = 0
+    indices = np.random.choice(n,s,replace=False)
+    theta = np.zeros((n,1))
+    theta[indices,:] = np.random.randn(s,1)
 
     A = np.random.rand(m, n)
-    B = blackbox(A, x_orig)
+    B = blackbox(A, theta)
 
     x = cp.Variable(shape=(n, 1))
 
@@ -30,4 +26,5 @@ if __name__ == "__main__":
 
     # The optimal objective value is returned by `prob.solve()`.
     result = prob.solve()
-    print(np.linalg.norm(x.value - x_orig))
+    
+    print(np.linalg.norm(x.value - theta))
