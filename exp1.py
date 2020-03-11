@@ -6,18 +6,21 @@ import matplotlib.pyplot as plt
 
 def getDCTBasis(n):
     '''Gives us the basis for 1d-DCT for n-dimensional signals'''
-    return dct(np.eye(n),type=2,norm='ortho')
+    return dct(np.eye(n), type=2, norm='ortho')
 
-def dct2 (block):
-  return dct(dct(block.T, norm = 'ortho').T, norm = 'ortho')
 
-def idct2 (block):
-  return idct(idct(block.T, norm = 'ortho').T, norm = 'ortho')
+def dct2(block):
+    return dct(dct(block.T, norm='ortho').T, norm='ortho')
+
+
+def idct2(block):
+    return idct(idct(block.T, norm='ortho').T, norm='ortho')
+
 
 if __name__ == "__main__":
     data_path = "./data/"
     img_array = cv2.imread(data_path + "lena.bmp", 0)
-    assert img_array.shape[0]==img_array.shape[1]
+    assert img_array.shape[0] == img_array.shape[1]
     n = img_array.shape[0]
     # img = Image.fromarray(img_array)
     shape = img_array.shape
@@ -28,9 +31,8 @@ if __name__ == "__main__":
 
     theta = dct2(img_array)
     Phi = getDCTBasis(n)
-    theta2 = Phi.T@img_array@Phi
+    theta2 = Phi.T @ img_array @ Phi
 
-    
     U = np.absolute(theta).flatten()
 
     U_sorted = sorted(U, reverse=True)
@@ -41,7 +43,7 @@ if __name__ == "__main__":
 
     plt.figure()
     s = 20000
-    plt.title('Reconstructed with {0} coefficients out of {1}'.format(s,n*n))
+    plt.title('Reconstructed with {0} coefficients out of {1}'.format(s, n * n))
     thresh = U_sorted[s]
     theta[np.absolute(theta) < thresh] = 0
     X_cap = idct2(theta)

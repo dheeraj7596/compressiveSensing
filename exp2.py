@@ -10,8 +10,8 @@ from scipy.fftpack import idct, dct
 
 x = np.random.randn((100))
 
-theta = dct(x,type=2,norm='ortho')
+theta = dct(x, type=2, norm='ortho')
 
-Phi = dct(np.eye(100),type=2,norm='ortho')
+Phi = dct(np.eye(100), type=2, norm='ortho')
 
-theta2 = Phi.T@x
+theta2 = Phi.T @ x
