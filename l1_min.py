@@ -14,7 +14,7 @@ def l1_optimize(A, B):
     objective = cp.Minimize(cp.norm(x, 1))
     constraints = [cp.matmul(A, x) == B]
     prob = cp.Problem(objective, constraints)
-    result = prob.solve()
+    result = prob.solve(verbose=True, max_iter=100000)
     return x.value
 
 

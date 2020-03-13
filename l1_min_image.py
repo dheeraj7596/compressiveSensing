@@ -1,35 +1,38 @@
 import numpy as np
-import random
-import cvxpy as cp
 import cv2
-from l1_min import blackbox
+import matplotlib.pyplot as plt
+from l1_min import blackbox, l1_optimize
 from exp1 import getDCTBasis
 
-
-def l1_optimize(A, Phi, B):
-    n = A.shape[1]
-    theta = cp.Variable(shape=(n, n))
-
-    objective = cp.Minimize(cp.norm(theta, 1))
-    constraints = [cp.matmul(A, cp.matmul(Phi, cp.matmul(theta, Phi.T))) == B]
-    prob = cp.Problem(objective, constraints)
-    result = prob.solve()
-    return theta.value
-
-
 if __name__ == "__main__":
-    m = 30
     data_path = "./data/"
 
     img_array = cv2.imread(data_path + "lena.bmp", 0)
+    plt.figure()
+    plt.title("Original Image")
+    plt.imshow(img_array, cmap='gray')
+    plt.show()
     assert img_array.shape[0] == img_array.shape[1]
     n = img_array.shape[0]
-
-    A = np.random.rand(m, n, n)
-    B = blackbox(A, img_array)
     Phi = getDCTBasis(n)
 
-    theta_reconstructed = l1_optimize(A, Phi, B)
-    x = Phi @ theta_reconstructed @ Phi.T
+    theta_orig = Phi.T @ img_array @ Phi
+    theta_reconstructed = np.array([])
+    for col in theta_orig.T:
+        col = col.reshape((n, 1))
+        A = np.random.rand(n, n)
+        B = blackbox(A, col)
+        col_reconstructed = l1_optimize(A, B)
+        if len(theta_reconstructed) == 0:
+            theta_reconstructed = col_reconstructed
+        else:
+            theta_reconstructed = np.hstack((theta_reconstructed, col_reconstructed))
 
-    print(np.linalg.norm(x - img_array))
+    print("Theta reconstruction error: ", np.linalg.norm(theta_reconstructed - theta_orig))
+
+    img_array_reconstructed = Phi @ theta_reconstructed @ Phi.T
+    plt.figure()
+    plt.title("Reconstructed Image")
+    plt.imshow(img_array_reconstructed, cmap='gray')
+    plt.show()
+    print("Image reconstruction error: ", np.linalg.norm(img_array_reconstructed - img_array))
