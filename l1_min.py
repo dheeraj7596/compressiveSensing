@@ -25,7 +25,7 @@ def l1_optimize_with_noise(A, B, noise):
     objective = cp.Minimize(cp.norm(x, 1))
     constraints = [cp.norm(cp.matmul(A, x) - B) <= cp.sqrt(noise * n)]
     prob = cp.Problem(objective, constraints)
-    result = prob.solve(verbose=True, max_iter=100000)
+    result = prob.solve(verbose=True)
     return x.value
 
 
