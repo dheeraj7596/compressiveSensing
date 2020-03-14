@@ -18,6 +18,17 @@ def l1_optimize(A, B):
     return x.value
 
 
+def l1_optimize_with_noise(A, B, noise):
+    n = A.shape[1]
+    x = cp.Variable(shape=(n, 1))
+
+    objective = cp.Minimize(cp.norm(x, 1))
+    constraints = [cp.norm(cp.matmul(A, x) - B) <= cp.sqrt(noise * n)]
+    prob = cp.Problem(objective, constraints)
+    result = prob.solve(verbose=True, max_iter=100000)
+    return x.value
+
+
 if __name__ == "__main__":
     s = 5
     m = 30

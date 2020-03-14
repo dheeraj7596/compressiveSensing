@@ -1,12 +1,13 @@
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-from l1_min import blackbox, l1_optimize
+from l1_min import blackbox, l1_optimize, l1_optimize_with_noise
 from exp1 import getDCTBasis
 
 if __name__ == "__main__":
     data_path = "./data/"
 
+    noise_variance = 15
     img_array = cv2.imread(data_path + "lena.bmp", 0)
     plt.figure()
     plt.title("Original Image")
@@ -22,7 +23,8 @@ if __name__ == "__main__":
         col = col.reshape((n, 1))
         A = np.random.rand(n, n)
         B = blackbox(A, col)
-        col_reconstructed = l1_optimize(A, B)
+        # col_reconstructed = l1_optimize(A, B)
+        col_reconstructed = l1_optimize_with_noise(A, B, noise_variance)
         if len(theta_reconstructed) == 0:
             theta_reconstructed = col_reconstructed
         else:
