@@ -9,6 +9,7 @@ from GRASP import GRASP
 from OMP import rmse
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     n = 200
@@ -34,6 +35,12 @@ if __name__ == "__main__":
                     theta_recon = GRASP(A, y, s, abs_tol)
                     results[i, j, k, l] = rmse(theta, theta_recon)
 
-    ## TODO: plot the reults
+    results_median = np.median(results, axis=-1)
+    for i, s in enumerate(s_arr):
+        plt.figure()
+        plt.title("Dense parameter: " + str(s))
+        plt.imshow(results_median[i, :, :])
+        plt.colorbar()
+        plt.show()
 
     print(results)
