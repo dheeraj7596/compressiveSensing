@@ -14,7 +14,7 @@ def rmse(x, x_recon):
 
 def GRASP(A, y, s, abs_tol=1e-6, max_iter=100):
     m, n = A.shape
-    abs_tol = max(abs_tol,1e-6)
+    abs_tol = max(abs_tol, 1e-6)
     r = y.copy()
     theta = np.zeros((n, 1))
     T = np.zeros((n), dtype=bool)
