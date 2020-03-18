@@ -1,10 +1,24 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Mar 18 00:10:34 2020
+
+@author: 14uda
+"""
+
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Mar 17 23:53:26 2020
+
+@author: 14uda
+"""
+
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-from l1_min import l1_optimize_with_noise
-from exp1 import getDCTBasis
 from OMP import rmse
-import math 
+from GRASP import GRASP
+from exp1 import getDCTBasis
+import math
 
 if __name__ == "__main__":
     data_path = "./data/"
@@ -29,7 +43,7 @@ if __name__ == "__main__":
         A = np.random.rand(m, n) @ Phi
         y = A @ col + sigma*np.linalg.norm(col)*np.random.randn(m, 1)
         abs_tol = math.sqrt(4 * n) * sigma * np.linalg.norm(col)
-        col_recon = l1_optimize_with_noise(A, y, sigma)
+        col_recon = GRASP(A, y, 100,abs_tol)
         theta_recon[:,i] = col_recon.squeeze()
     img_recon = Phi @ theta_recon # 1D IDCT of cols
     plt.figure()
