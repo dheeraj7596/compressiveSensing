@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Mar 15 19:05:22 2020
+Created on Tue Mar 17 21:37:02 2020
 
 @author: 14uda
 """
 
-from GRASP import GRASP
-from OMP import rmse
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-
+from l1_min import l1_optimize_with_noise
+from OMP import rmse
 if __name__ == "__main__":
     n = 200
 
@@ -33,8 +32,7 @@ if __name__ == "__main__":
                     A = np.random.rand(m, n)
                     y = A @ theta + sigma * np.random.randn(m, 1)
                     abs_tol = math.sqrt(4 * n) * sigma * np.linalg.norm(theta)
-                    theta_recon = GRASP(A, y, s, abs_tol)
-                    # print(rmse(theta, theta_recon))
+                    theta_recon = l1_optimize_with_noise(A, y, sigma)
                     results[i, j, k, l] = rmse(theta, theta_recon)
 
     results_median = np.median(results, axis=-1)
@@ -57,5 +55,3 @@ if __name__ == "__main__":
         cbar = ax.figure.colorbar(im, ax=ax)
         cbar.ax.set_ylabel("Relative Mean Squared error", rotation=-90, va="bottom")
         plt.show()
-        
-    # print(results)
