@@ -29,7 +29,7 @@ if __name__ == "__main__":
         A = np.random.rand(m, n) @ Phi
         y = A @ col + sigma*np.linalg.norm(col)*np.random.randn(m, 1)
         abs_tol = math.sqrt(4 * n) * sigma * np.linalg.norm(col)
-        col_recon = l1_optimize_with_noise(A, y, sigma)
+        col_recon = l1_optimize_with_noise(A, y, sigma, Phi)
         theta_recon[:,i] = col_recon.squeeze()
     img_recon = Phi @ theta_recon # 1D IDCT of cols
     plt.figure()
