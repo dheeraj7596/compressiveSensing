@@ -16,7 +16,7 @@ if __name__ == "__main__":
     data_path = "./data/"
 
     sigma = 0.01
-    img_array = cv2.imread(data_path + "lena.bmp", 0)
+    img_array = cv2.imread(data_path + "clown.bmp", 0)
     plt.figure()
     plt.title("Original Image")
     plt.imshow(img_array, cmap='gray')
